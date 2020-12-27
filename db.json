@@ -1,0 +1,125 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Flor de capuchinha",
+      "brand": "",
+      "category": [
+        0
+      ],
+      "packageType": "bandeja",
+      "packageOptions": {
+        "weight": "15g",
+        "qti": ""
+      },
+      "cert": "Cert. IBD",
+      "price": 12,
+      "thumbnail": "/static/prod.png",
+      "description": "Texto sobre o produto. Só aparece quando a pessoa clica no ícone de saiba mais no canto da foto. O box com o nome “sobe” por cima da foto e esse texto fica visível."
+    },
+    {
+      "id": 2,
+      "name": "Pão de hambúrguer rústico",
+      "brand": "",
+      "category": [
+        3,
+        4
+      ],
+      "packageType": "pct",
+      "packageOptions": {
+        "weight": "",
+        "qti": "4un"
+      },
+      "cert": "Cert. IBD",
+      "price": 12,
+      "thumbnail": "/static/prod.png",
+      "description": "Texto sobre o produto. Só aparece quando a pessoa clica no ícone de saiba mais no canto da foto. O box com o nome “sobe” por cima da foto e esse texto fica visível."
+    },
+    {
+      "id": 3,
+      "name": "Filé de peito de frango",
+      "brand": "Korin",
+      "category": [
+        5
+      ],
+      "packageType": "pct",
+      "packageOptions": {
+        "weight": "600g",
+        "qti": ""
+      },
+      "cert": "Cert. IBD",
+      "price": 12,
+      "thumbnail": "/static/prod.png",
+      "description": "Texto sobre o produto. Só aparece quando a pessoa clica no ícone de saiba mais no canto da foto. O box com o nome “sobe” por cima da foto e esse texto fica visível."
+    }
+  ],
+  "users": [
+    {
+      "id": 0,
+      "name": "Admin",
+      "username": "admin",
+      "password": "admin",
+      "cod_cliente": "#USR00#",
+      "isActive": true
+    },
+    {
+      "name": "Luiza Melo",
+      "username": "luiza-melo",
+      "password": "4ac22e196e79cc528f20809f09eac25bb3a32c2f",
+      "cod_cliente": "4ac22e196e79cc528f20809f09eac25bb3a32c2f",
+      "isActive": true,
+      "email": "wesandradealves@outlook.com",
+      "id": 1
+    },
+    {
+      "name": "Benjamin Calebe Moura",
+      "username": "benjamin-calebe-moura",
+      "password": "3304c3ada7650bceeb3c65ccbc27c5e0dceb6039",
+      "cod_cliente": "3304c3ada7650bceeb3c65ccbc27c5e0dceb6039",
+      "isActive": true,
+      "address": "Travessa Pastana, 568 - Conquista, Santarém - PA",
+      "cpf": "788.470.487-02",
+      "phone": "(93) 9 8766-9877",
+      "email": "benjamincalebemoura-89@tita.com.br",
+      "id": 2
+    }
+  ],
+  "categories": [
+    {
+      "id": 0,
+      "name": "Verduras",
+      "slug": "verduras",
+      "isActive": true
+    },
+    {
+      "id": 1,
+      "name": "Legumes",
+      "slug": "legumes",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "name": "Frutas",
+      "slug": "frutas",
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "name": "Pães",
+      "slug": "paes",
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "name": "Semi Assados",
+      "slug": "semi-assados",
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "name": "Carne e Frango",
+      "slug": "carne-e-frango",
+      "isActive": true
+    }
+  ]
+}
