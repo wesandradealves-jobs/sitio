@@ -43,6 +43,9 @@ const Checkout: React.FC = () => {
 	const user = JSON.parse(localStorage.getItem('user') || '[]');
 
 	const handleTotal = (key, arr) => {
+		if(key=='total') {
+			return arr.reduce((a, b) => parseFloat(a) + (parseFloat(b[key]) || 0), 0).toFixed(2);
+		}
 		return arr.reduce((a, b) => a + (b[key] || 0), 0);
 	};	    	
 
@@ -129,50 +132,7 @@ const Checkout: React.FC = () => {
 	        		status: false,
 	        		msg: error.text
 	        	});				       
-		    });				
-
-			/*let uri = encodeURIComponent(JSON.stringify(form.map((o:any) => {
-				return {
-				  ...form[0],
-				  qti: handleTotal('qti', store.cart),
-				  total: `R$ ${parseFloat(handleTotal('price', store.cart)).toFixed(2)}`,
-				  cart: store.cart
-				}
-			})));
-
-			/*emailjs.send('service_urfbf8t', 'template_hgh39n4', obj, 'user_qYVbsfdo8ncuutijFzhMC')
-		    .then(function(response) {
-		    	console.log(response);
-				store.doLoading(false);
-		    }, function(error) {
-		       	console.log(error);
-		       	store.doLoading(false);
-	        	store.setRegisterMsg({
-	        		status: false,
-	        		msg: error.text
-	        	});				       
-		    });		*/		
-
-			/*let http = new XMLHttpRequest();
-
-			http.open("GET", `//dev.uppercreative.com.br/sitio-mail-api/index.php?checkout=${uri}`, true);
-			http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-			http.send();
-
-			http.onreadystatechange = function() {
-				if (http.readyState == 4 && http.status == 200) {
-					if(typeof http.responseText == 'string' && http.responseText !== 'Success') {
-			        	store.setSignMsg({
-			        		status: false,
-			        		msg: 'Ocorreram erros ao enviar seu formulário'
-			        	});	
-					}  else {
-						setModal(!modal);
-					}
-					store.doLoading(false);
-				}
-			}*/
+		    });	
 		}
 	}    
 
@@ -182,8 +142,11 @@ const Checkout: React.FC = () => {
 	}   		
 
 	useEffect(() => {
-		if(!store.cart.length) {
+		if(!store.cart.length && !localStorage.getItem('cart')) {
 			history.push("/shop");
+		} else {
+			const cart = JSON.parse(localStorage.getItem('cart'));
+			store.setCart(cart);
 		}
 	}, []);  	
 
@@ -220,7 +183,7 @@ const Checkout: React.FC = () => {
 							<td>{handleTotal('qti', store.cart)}</td>
 							<td>Quantidade total</td>
 							<td>Valor total</td>
-							<td>R$ {parseFloat(handleTotal('price', store.cart)).toFixed(2)}</td>
+							<td>R$ {handleTotal('total', store.cart)}</td>
 						</tr>								
 					</tbody>	
 				</CheckoutTable>
@@ -236,7 +199,7 @@ const Checkout: React.FC = () => {
 								},
 								{
 									label: 'Valor total da compra',
-									value: `R$ ${parseFloat(handleTotal('price', store.cart)).toFixed(2)}`
+									value: `R$ ${handleTotal('total', store.cart)}`
 								}								
 							]}
 							conditional={
@@ -263,7 +226,7 @@ const Checkout: React.FC = () => {
 								width: '100%',
 								name: 'email'
 							} : o)} /> 
-							<Backto placeholder="Voltar" />
+							<Backto placeholder="Continuar comprando" />
 					</CheckoutForm>
 				</Sidebar>
 			</Container>

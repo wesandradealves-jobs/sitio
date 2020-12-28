@@ -23,36 +23,38 @@ import ico from '../../assets/expand.png';
 
 interface ICard extends InputHTMLAttributes<HTMLInputElement> {
 	data:any;
+	onClick?: any;
 }
 
-export const Card: React.FC<ICard> = ({ data }) => {
+export const Card: React.FC<ICard> = ({ data, onClick }) => {
+	const _ = require('lodash');
 	const store = useContext(Context);
 	const [categories, setCategories] = useState<any>([]);
-	let [count, doCount] = useState<number>(0);
 	let [isExpanded, doExpand] = useState<boolean>(false);
 
+	const replaceItem = (arr) => {
+		return {
+			with: function(arr2) {
+				return _.map(arr, item => {
+					return _.find(arr2, obj => obj.name === item.name) || item
+				})
+			}
+		}
+	}
+	  
 	const handleCounter = (e) => {
 		let i = [...e.target.parentElement.children].indexOf(e.target);
-		doCount(i == 1 ? (count > 0 ? count-=1 : count) : count+=1);
 
-		let products = store.data;
-
-		let $this = store.data.filter((o:any) => {
-			return o.id === data.id 
-		}).map((o:any) => {
+		let $this = store.data.filter((o:any, index:number) => {
+			return o.name == data.name
+		}).map((o:any, index:number) => {
 			return {
 				...o,
-				qti: count
+				qti: i == 1 ? (o.qti > 0 ? o.qti-=1 : o.qti) : o.qti+=1
 			}
 		})[0];
 
-		store.data.find(o => o.id == data.id).qti = count;
-
-		store.setCart(store.data.filter((o:any) => {
-			return o.qti > 0
-		}));
-
-		// localStorage.setItem('cart', JSON.stringify(store.cart));
+		return $this;
 	} 	
 
 	useEffect(() => {
@@ -71,7 +73,7 @@ export const Card: React.FC<ICard> = ({ data }) => {
 		}
 
 		setCategories(categories);
-	}, [store, data]);
+	}, []);
 
 	return (
 		<> 
@@ -98,8 +100,8 @@ export const Card: React.FC<ICard> = ({ data }) => {
 					<Counter> 
 						<Qti>{data.qti}</Qti>
 						<Action>
-							<Button onClick={e => handleCounter(e)}>+</Button>
-							<Button onClick={e => handleCounter(e)}>-</Button>
+							<Button onClick={e => onClick(handleCounter(e))}>+</Button>
+							<Button onClick={e => onClick(handleCounter(e))}>-</Button>
 						</Action>
 					</Counter>
 				</CardFooter>

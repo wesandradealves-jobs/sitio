@@ -16,6 +16,7 @@ export default function App() {
 	const [registerMsg, setRegisterMsg] = useState<any>({});
 	const [token, setToken] = useState<any>();
 	const [data, setData] = useState<any>([]);
+	const [filter, setFilter] = useState<any>([]);
 	const [cart, setCart] = useState<any>([]);
 	const [categories, setCategories] = useState<any>([]);
 	const [isLoading, doLoading] = useState<any>(false);
@@ -48,7 +49,9 @@ export default function App() {
 			setCart: setCart,
 			cart,			
 			setData: setData,
-			data,				
+			data,		
+			setFilter: setFilter,
+			filter,						
 			setToken: setToken,
 			token,	
 			registerMsg: registerMsg,

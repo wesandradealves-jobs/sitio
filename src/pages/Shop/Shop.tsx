@@ -30,16 +30,47 @@ import SearchBar from '../../components/SearchBar';
 import CategoryFilter from '../../components/CategoryFilter';
 
 const Shop: React.FC = () => {
+	const _ = require('lodash');
 	const history = useHistory();
 	const store = useContext(Context);
-	const [filter, setFilter] = useState<any>([]);
+	const [categoryFilterString, setCategoryFilter] = useState<String>('Selecione uma categoria');
+	const [querySearch, setQuerySearch] = useState<String>();
 	const [products, setProducts] = useState<any>([]);
 	const { GoogleSpreadsheet } = require('google-spreadsheet');
 	const doc = new GoogleSpreadsheet('1YZmCGzqDldxuOHIcd5nET3_5CNKkple2ZETbb1Q6daE');
 	doc.useApiKey('AIzaSyD_Q7vMxljGSQ-KRVH1RoKgB2UHS576QEo');
 
-	const handleFilter = (o: any) => {
-		setFilter(o);
+	const handleItem = (o: any) => {
+		const hash = require('object-hash');
+
+		const index = _.findIndex(store.data, {name: o.name});
+		
+		store.data.splice(index, 1, o);
+
+		store.setData(store.data);
+
+		store.setCart(store.data.filter((o:any, index:number) => {
+			return o.qti > 0
+		}).map((o:any, index:number) => {
+			return {
+				category: o.category,
+				cert: o.cert,
+				description: o.description,
+				id: o.id,
+				name: o.name,
+				qtd: o.qtd,
+				qti: o.qti,
+				thumbnail: o.thumbnail,
+				total: o.price * o.qti,
+				price: o.price			
+			}
+		}));
+
+		localStorage.setItem('cart', JSON.stringify(store.cart));
+	};		
+
+	const handleCategoryFilter = (o: any) => {
+		setCategoryFilter(o);
 	};		
 
 	const handleSubmit = () => {
@@ -47,7 +78,6 @@ const Shop: React.FC = () => {
 	};	
 
 	useEffect(() => {
-		const _ = require('lodash');
 		const slugify = require('slugify');
 		
 		let productsByCategory = _.chain(products)
@@ -55,10 +85,19 @@ const Shop: React.FC = () => {
 		.map((value, key) => ({ category: key, products: value }))
 		.value();
 
+		if(localStorage.getItem('cart')) {
+			const cart = JSON.parse(localStorage.getItem('cart'));
+			store.setCart(cart);
+			cart.forEach(function(o){
+				const index = _.findIndex(products, {name: o.name});
+				products.splice(index, 1, o);
+			});
+		}			
+
 		store.setData(products.map((o:any, index:number) => {
 			return {
 				...o,
-				qti: 0				
+				qti: o.qti ? o.qti : 0				
 			}
 		}));	
 		
@@ -73,6 +112,8 @@ const Shop: React.FC = () => {
 	}, [products]);	  
 	
 	useEffect(() => {
+		store.doLoading(true);
+
 		async function load() {
 			await doc.loadInfo();
 			const sheet = doc.sheetsByIndex[0];
@@ -81,28 +122,39 @@ const Shop: React.FC = () => {
 				return o.name.trim().toLowerCase() !== 'esgotado';
 			})); 
 		}
+
 		load();		
 	}, []);  
 
 	useEffect(() => {
 		if(store.data.length&&store.categories.length) {
-			store.doLoading(false);
+			store.doLoading(false);		
 		}
-	}, [store]);  		
+	}, [store]);  
 
 	return (
 		<>
 			<Filter>
                 <SearchBar 
-                  onChange={(s) => handleFilter(s)}
-                  filter={['name']}
+                  onChange={(s) => setQuerySearch(s)}
                   placeholder="Busca por produto..." />		
-                <CategoryFilter data={store.categories} onChange={(s) => handleFilter(s)} />	
+                <CategoryFilter data={store.categories} onChange={(s) => handleCategoryFilter(s)} />	
 			</Filter>
 			<ProductList>
-				{filter.map((o:any, index:number) => (
+				{store.data.filter((o:any) => {
+					if(categoryFilterString !== 'Selecione uma categoria' && !querySearch) {
+						return o.category == categoryFilterString;
+					} else if(querySearch && categoryFilterString !== 'Selecione uma categoria') {
+						return ['name'].some(field => o[field].toLowerCase().indexOf(querySearch) >= 0) && o.category == categoryFilterString
+					} else if(querySearch && categoryFilterString == 'Selecione uma categoria') {
+						return ['name'].some(field => o[field].toLowerCase().indexOf(querySearch) >= 0)
+					}
+					return [...store.data]
+				}).map((o:any, index:number) => (
 					<ProductListItem key={index}>  
-							<Card data={o} />
+						<Card 
+						onClick={(s) => handleItem(s)}
+						data={o} />
 					</ProductListItem>
 				))} 
 			</ProductList>		

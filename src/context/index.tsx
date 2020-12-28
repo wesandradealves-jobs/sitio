@@ -14,6 +14,8 @@ interface IContextProps {
 	cart?: any;
 	setCart?: any;	
 	data?: any;
+	setFilter?: any;	
+	filter?: any;	
 	setData?: any;	
 	categories?: any;
 	setCategories?: any;				
