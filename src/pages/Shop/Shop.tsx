@@ -60,7 +60,7 @@ const Shop: React.FC = () => {
 				name: o.name,
 				qtd: o.qtd,
 				qti: o.qti,
-				thumbnail: o.thumbnail,
+				thumbnail: o.thumbnail ? o.thumbnail : process.env.REACT_APP_NOTFOUND,
 				total: o.price * o.qti,
 				price: o.price			
 			}
@@ -95,8 +95,10 @@ const Shop: React.FC = () => {
 		}			
 
 		store.setData(products.map((o:any, index:number) => {
+			console.log(process.env);
 			return {
 				...o,
+				thumbnail: o.thumbnail ? o.thumbnail : process.env.REACT_APP_NOTFOUND,
 				qti: o.qti ? o.qti : 0				
 			}
 		}));	

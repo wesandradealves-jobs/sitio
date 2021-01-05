@@ -42,7 +42,7 @@ export const Category = styled.p`
 export const Thumbnail = styled.div<ICard>`
 	flex: 1;
 	background-size: cover;
-	background-position: center center;
+	background-position: center -45px;
 	background-repeat: no-repeat;
 	display: flex;
 	flex-flow: column;
@@ -50,7 +50,7 @@ export const Thumbnail = styled.div<ICard>`
 	${({ img }) =>
 		img &&
 		css`
-			background-image url(${img});
+			background-image url('${img}');
 		`}	
 `;
 

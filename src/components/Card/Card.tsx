@@ -79,7 +79,7 @@ export const Card: React.FC<ICard> = ({ data, onClick }) => {
 		<> 
 			<CardWrapper> 
 				<Category>{data.category}</Category>
-				<Thumbnail img={data.thumbnail}> 
+				<Thumbnail className="thumbnail" img={data.thumbnail}> 
 					<Expand onClick={e => doExpand(!isExpanded)} src={ico} />
 					<ProductInfo isExpanded={isExpanded}> 
 						<CardTitle title={data.name}>
